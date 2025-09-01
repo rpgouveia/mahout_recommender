@@ -43,7 +43,11 @@ public class Recommender {
         System.out.println("Recomendações para o usuário " + userId + ":");
         for (RecommendedItem recommendation : recommendations) {
             String itemName = itemNames.getOrDefault(recommendation.getItemID(), "Nome do Item Desconhecido");
-            System.out.println("  - Item: " + itemName + " (ID: " + recommendation.getItemID() + "), Valor de preferência: " + String.format("%.2f", recommendation.getValue()));
+            System.out.println(
+                    "  - Item: " + itemName +
+                    " (ID: " + recommendation.getItemID() + "), " +
+                    "Valor de preferência: " + String.format("%.2f", recommendation.getValue())
+            );
         }
     }
 
