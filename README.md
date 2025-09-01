@@ -4,7 +4,7 @@ Um sistema de recomendação colaborativo implementado em Java, que sugere itens
 
 ## 📋 Descrição
 
-Este projeto implementa um sistema de recomendação baseado em usuários (**User-Based Collaborative Filtering**) utilizando o **Apache Mahout 0.9**. O sistema analisa as avaliações de diferentes usuários para encontrar padrões de similaridade e fazer recomendações personalizadas.
+Este projeto implementa um sistema de recomendação baseado em usuários (User-Based Collaborative Filtering) utilizando o Apache Mahout 0.9. O sistema analisa as avaliações de diferentes usuários para encontrar padrões de similaridade e fazer recomendações personalizadas.
 
 ## 🚀 Funcionalidades
 
@@ -12,6 +12,7 @@ Este projeto implementa um sistema de recomendação baseado em usuários (**Use
 - **Similaridade de Pearson**: Calcula correlação entre usuários para encontrar vizinhanças.
 - **Vizinhança por Threshold**: Define usuários similares com base em um limite de similaridade (neste caso, 0.1).
 - **Recomendações Personalizadas**: Gera sugestões específicas para cada usuário com um valor de preferência previsto.
+- **Mapeamento de Itens**: Exibe o nome do item para uma saída mais didática e clara.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -55,10 +56,12 @@ Este projeto implementa um sistema de recomendação baseado em usuários (**Use
         </dependencies>
     </project>
     ```
+    
+4.  **Adicione os arquivos de dados** no diretório raiz do projeto:
+- `ratings.csv`: Contém os dados de avaliação com o formato `userId,itemId,rating`.
+- `item_names.csv`: Contém o mapeamento dos itens com o formato `itemId,itemName`.
 
-4.  **Coloque o código-fonte** da classe `Recommender.java` dentro da pasta `src/main/java/com/example`.
-
-5.  **Crie o arquivo de dados** `ratings.csv` no diretório raiz do projeto com o formato `userId,itemId,rating`.
+5.  **Coloque o código-fonte** da classe `Recommender.java` dentro da pasta `src/main/java/com/example`.
 
 6.  **Compile e execute** o projeto usando o Maven.
     ```bash
@@ -69,3 +72,17 @@ Este projeto implementa um sistema de recomendação baseado em usuários (**Use
     mvn exec:java -Dexec.mainClass="com.example.Recommender"
     ```
     A saída irá mostrar as recomendações geradas.
+
+## 📄 Estrutura do Projeto
+
+```
+├── pom.xml
+├── ratings.csv
+├── item_names.csv
+└── src
+    └── main
+        └── java
+            └── com
+                └── example
+                    └── Recommender.java
+```

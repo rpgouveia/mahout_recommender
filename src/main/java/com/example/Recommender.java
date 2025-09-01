@@ -10,36 +10,60 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Recommender {
 
     public static void main(String[] args) throws Exception {
-        // 1. Criar um modelo de dados a partir de um arquivo
-        // O arquivo deve ter o formato: userId,itemId,rating
-        // Ex: 101,201,5.0
+        // 1. Criar um modelo de dados a partir do arquivo ratings.csv
         DataModel model = new FileDataModel(new File("ratings.csv"));
 
         // 2. Definir a métrica de similaridade entre usuários
         UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 
         // 3. Definir a vizinhança de usuários (quem são os "vizinhos" de um usuário)
-        // Aqui, usamos um limite de similaridade de 0.1
         UserNeighborhood neighborhood = new ThresholdUserNeighborhood(0.1, similarity, model);
 
         // 4. Criar o recomendador
         UserBasedRecommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
 
         // 5. Obter recomendações para um usuário específico
-        // Vamos recomendar 3 itens para o usuário com ID 1
         long userId = 1;
         List<RecommendedItem> recommendations = recommender.recommend(userId, 3);
 
-        // 6. Imprimir as recomendações
+        // 6. Mapear os IDs dos itens para seus nomes a partir de item_names.csv
+        Map<Long, String> itemNames = loadItemNames("item_names.csv");
+
+        // 7. Imprimir as recomendações de forma mais clara
         System.out.println("Recomendações para o usuário " + userId + ":");
         for (RecommendedItem recommendation : recommendations) {
-            System.out.println("  - Item ID: " + recommendation.getItemID() + ", Valor de preferência: " + recommendation.getValue());
+            String itemName = itemNames.getOrDefault(recommendation.getItemID(), "Nome do Item Desconhecido");
+            System.out.println("  - Item: " + itemName + " (ID: " + recommendation.getItemID() + "), Valor de preferência: " + String.format("%.2f", recommendation.getValue()));
         }
+    }
+
+    /**
+     * Lê um arquivo CSV de mapeamento de ID do item para nome e o retorna como um Mapa.
+     * O arquivo deve ter o formato: itemId,itemName
+     */
+    private static Map<Long, String> loadItemNames(String filePath) throws Exception {
+        Map<Long, String> itemNames = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    long itemId = Long.parseLong(parts[0].trim());
+                    String itemName = parts[1].trim();
+                    itemNames.put(itemId, itemName);
+                }
+            }
+        }
+        return itemNames;
     }
 }
