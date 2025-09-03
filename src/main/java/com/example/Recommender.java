@@ -24,9 +24,12 @@ public class Recommender {
         DataModel model = new FileDataModel(new File("ratings.csv"));
 
         // 2. Definir a métrica de similaridade entre usuários
+        // A correlação de Pearson varia de -1 a 1.
+        // Quanto mais próximo de 1, mais similares são os usuários.
         UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 
         // 3. Definir a vizinhança de usuários (quem são os "vizinhos" de um usuário)
+        // Threshold de 0.1 significa que consideramos usuários com similaridade acima de 10%.
         UserNeighborhood neighborhood = new ThresholdUserNeighborhood(0.1, similarity, model);
 
         // 4. Criar o recomendador
